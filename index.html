@@ -89,7 +89,12 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
   background:linear-gradient(180deg,#fff,#ffe08a 45%,#e8a53a);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 #a8661c) drop-shadow(0 2px 4px #0005)}
 .attr{position:absolute;top:8px;right:8px;z-index:2;font-size:10px;font-weight:700;padding:3px 7px;border-radius:99px;background:#ffffffd9;color:var(--acc)}
 .card-info{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:8px 10px 9px;background:linear-gradient(180deg,#ffffff00,#ffffffee 30%)}
-.card-info .stars{font-size:11px;color:#f2a93b;letter-spacing:1px;text-shadow:0 0 4px #fff}
+.card-info .stars{font-size:15px;line-height:1;color:#f5a623;letter-spacing:1px;text-shadow:0 0 4px #fff}
+.bigcard .card-info .stars{font-size:22px;letter-spacing:2px;margin-bottom:2px}
+.st-on{color:#f5a623;text-shadow:0 0 6px #ffcf5a,0 0 2px #fff}
+.st-off{color:#d9cde0}
+.st-rb{background:linear-gradient(90deg,#ff6fae,#ffb84d,#5fd6a0,#5fb4ff,#a98bff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 4px #fff) drop-shadow(0 0 6px #ffd6ea)}
+.st-skull{letter-spacing:0;font-size:.9em}
 .card-info .cn{font-family:"Gowun Batang",serif;font-weight:700;font-size:17px;color:var(--ink)}
 .card-info .ct{font-size:11px;color:var(--ink2);margin-top:1px}
 
@@ -254,7 +259,6 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 #endBg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#2a163f55 0%,#2a163f22 30%,#2a163f88 62%,#2a163fcc 100%)}
 #ending .get{margin-top:14px;font-size:34px;text-shadow:0 0 10px #ff8fc3,0 0 22px #b79bff,0 2px 4px #0006}
 #ending .bigcard{width:min(56%,230px);margin-top:4px}
-#ending .bigcard .card-info .ct{display:none}
 .end-box{width:100%;padding:12px 16px calc(20px + env(safe-area-inset-bottom))}
 .res{margin:0 auto 14px;max-width:360px;padding:16px 18px 14px;border-radius:18px;background:#fffffff2;border:2px solid #fff;box-shadow:0 0 0 2px #ffc2df,0 12px 30px #0004;text-align:center}
 .res-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -297,7 +301,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 .rar.r-xxx{background:linear-gradient(180deg,#fff,#ff2d6a);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 6px #ff2d6a)}
 #ending[data-sp="true"] .bigcard{background:linear-gradient(135deg,#ff8fc3,#ffd27a,#7dffc4,#9fd0ff,#b79bff,#ff8fc3);background-size:300% 300%;animation:rainbow 3s linear infinite}
 #ending[data-sp="hidden"] .bigcard{background:linear-gradient(135deg,#ff2d6a,#120610 45%,#ff2d6a 55%,#120610);animation:glitch 2.4s infinite}
-#ending[data-sp="hidden"] .bigcard .card-info .cn,#ending[data-sp="hidden"] .bigcard .card-info .stars{color:#4a2b55}
+#ending[data-sp="hidden"] .bigcard .card-info .cn{color:#4a2b55}
 @keyframes glitch{0%,92%,100%{transform:none;filter:none}93%{transform:translate(-3px,1px);filter:hue-rotate(40deg)}95%{transform:translate(3px,-1px)}97%{transform:translate(-1px,2px);filter:saturate(2)}}
 .res-badge[data-tier="true"]{background:linear-gradient(90deg,#ffd27a,#ff8fc3,#b79bff)}
 .res-badge[data-tier="hidden"]{background:linear-gradient(90deg,#ff2d6a,#4a0f2e)}
@@ -343,6 +347,17 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 .sm-box .btn-sub{width:60%}
 .sm-hint{font-size:12px;line-height:1.6;color:#ffd6ea}
 .sm-hint b{color:#fff}
+
+/* 카드 리디자인 */
+.bigcard .card-info{padding:30px 12px 11px;background:linear-gradient(180deg,#ffffff00 0%,#ffffffe6 34%,#fffffff7 52%,#fff 100%)}
+.bigcard .card-info .stars{font-size:24px;letter-spacing:1px;margin:0 0 6px -1px;filter:drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 1px 0 #fff) drop-shadow(0 -1px 0 #fff)}
+.bigcard .st-on{text-shadow:0 0 6px #ffc94d}
+.bigcard .st-off{color:#ddd2e4}
+.bigcard .st-rb{filter:none;text-shadow:none}
+.bigcard .ci-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding-top:7px;border-top:1px solid #b0306b2e}
+.bigcard .card-info .cn{font-size:20px;color:#3a1f48;white-space:nowrap;flex:none}
+.bigcard .card-info .ct{font-size:12px;font-weight:700;color:#b0306b;text-align:right;margin:0;line-height:1.3;white-space:nowrap;letter-spacing:-.02em;min-width:0;overflow:hidden;text-overflow:clip}
+#ending[data-sp="hidden"] .bigcard .card-info .ct{color:#c0174f}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -724,9 +739,13 @@ function portrait(id){
   return el;
 }
 const ATTR_COLOR={duke:"#3a6ab0",prince:"#b07a1a",exec:"#8a4a1a",idol:"#c0407f"};
+const STAR_RULE={high:{n:5,k:"gold"},mid:{n:3,k:"gold"},low:{n:1,k:"gold"},true:{n:5,k:"rainbow"},hidden:{n:5,k:"skull"}};
+function starHTML(tier){ const r=STAR_RULE[tier]; if(!r) return "";
+  if(r.k==="skull") return `<span class="st-skull">${"☠️".repeat(5)}</span>`;
+  return `<span class="st-on ${r.k==="rainbow"?"st-rb":""}">${"★".repeat(r.n)}</span><span class="st-off">${"★".repeat(5-r.n)}</span>`; }
 function cardEl(id, stars, sub, rar){
   const c=CHARS[id], w=document.createElement("div");
-  w.innerHTML=`<div class="card-in" style="--cbg:${c.cbg}"><span class="rar r-${(rar||"SSR").replace(/\W/g,"x")}">${rar||"SSR"}</span><span class="attr" style="--acc:${ATTR_COLOR[id]||c.accent}">${c.attr}</span><div class="card-info"><div class="stars">${"★".repeat(stars)}</div><div class="cn">${c.name}</div><div class="ct">${sub}</div></div></div>`;
+  w.innerHTML=`<div class="card-in" style="--cbg:${c.cbg}"><span class="rar r-${(rar||"SSR").replace(/\W/g,"x")}">${rar||"SSR"}</span><span class="attr" style="--acc:${ATTR_COLOR[id]||c.accent}">${c.attr}</span><div class="card-info"><div class="stars">${typeof stars==="string"?starHTML(stars):"★".repeat(stars)}</div><div class="ci-row"><div class="cn">${c.name}</div><div class="ct">${sub}</div></div></div></div>`;
   w.firstChild.insertBefore(portrait(id), w.firstChild.firstChild);
   return w.firstChild;
 }
@@ -888,7 +907,7 @@ function showEnding(){
   const stars=tier==="high"?5:tier==="mid"?4:3;
   last={id:st.id,label,title}; RES[st.id]=tier; RES.seen=RES.seen||{}; (RES.seen[st.id]=RES.seen[st.id]||[]); if(!RES.seen[st.id].includes(tier)) RES.seen[st.id].push(tier); saveRes(); refreshVisited(); drawPlaces();
   $("#endBg").innerHTML=bgLayer(st.id); particles($("#fxEnd"),"petal",22);
-  const bc=$("#bigcard"); bc.innerHTML=""; bc.appendChild(cardEl(st.id,stars,`「${title}」`)); last.stars=stars; last.rar="SSR"; last.tier=tier; addSaveBtn();
+  const bc=$("#bigcard"); bc.innerHTML=""; bc.appendChild(cardEl(st.id,tier,`「${title}」`)); last.stars=stars; last.rar="SSR"; last.tier=tier; addSaveBtn();
   $("#endLabel").textContent=label; $("#endLabel").dataset.tier=tier; $("#endTitle").textContent=`「${title}」`;
   $("#ending").dataset.sp=""; $("#toInvite").hidden=tier==="low"; $("#noInvite").hidden=tier!=="low"; $("#endReveal").innerHTML="그리고 밝혀진 충격의 진실<br><b>네 명의 남자는 모두… 앙~ 승완이었다</b>";
   $("#endAff").innerHTML=`호감도 <b>${"♥".repeat(st.score)}</b><s>${"♥".repeat(MAX-st.score)}</s>`; $("#endDesc").textContent=desc;
@@ -899,7 +918,7 @@ function showSpecialEnding(){
   last={id,label:e.label,title:e.title}; RES[id]="sp"; saveRes(); refreshVisited(); drawPlaces();
   $("#ending").dataset.sp=id; $("#toInvite").hidden=false; $("#noInvite").hidden=true;
   $("#endBg").innerHTML=bgLayer(id); particles($("#fxEnd"),id==="true"?"petal":"glit",id==="true"?30:20);
-  $("#bigcard").innerHTML=""; $("#bigcard").appendChild(cardEl(id,id==="true"?6:0,`「${e.title}」`,e.rar)); last.stars=id==="true"?6:0; last.rar=e.rar; last.tier=id; addSaveBtn();
+  $("#bigcard").innerHTML=""; $("#bigcard").appendChild(cardEl(id,id,`「${e.title}」`,e.rar)); last.stars=id==="true"?6:0; last.rar=e.rar; last.tier=id; addSaveBtn();
   $("#endLabel").textContent=e.label; $("#endLabel").dataset.tier=id; $("#endTitle").textContent=`「${e.title}」`;
   $("#endAff").textContent=e.aff; $("#endDesc").textContent=e.desc; $("#endReveal").innerHTML=e.reveal;
   show("ending"); $("#ending").scrollTop=0; const fl=$("#flash"); fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go");
@@ -932,24 +951,40 @@ async function saveCard(){
   const [fx,fy]=(c.focus||"50% 30%").split(" ").map(v=>parseFloat(v)/100);
   const s=Math.max(IW/img.width,IH/img.height), dw=img.width*s, dh=img.height*s;
   x.drawImage(img, IX+(IW-dw)*fx, IY+(IH-dh)*fy, dw, dh);
-  // 하단 패널
-  g=x.createLinearGradient(0,IY+IH-300,0,IY+IH); g.addColorStop(0,"rgba(255,255,255,0)"); g.addColorStop(.38,"rgba(255,255,255,.93)"); g.addColorStop(1,"#fff");
-  x.fillStyle=g; x.fillRect(IX,IY+IH-300,IW,300); x.restore();
+  // 하단 패널 (가독성: 위는 부드럽게, 글자 영역은 거의 불투명)
+  g=x.createLinearGradient(0,IY+IH-330,0,IY+IH); g.addColorStop(0,"rgba(255,255,255,0)"); g.addColorStop(.35,"rgba(255,255,255,.9)"); g.addColorStop(.5,"rgba(255,255,255,.97)"); g.addColorStop(1,"#fff");
+  x.fillStyle=g; x.fillRect(IX,IY+IH-330,IW,330); x.restore();
   // 등급
   x.font='italic 900 74px "Noto Sans KR",sans-serif'; x.textBaseline="top";
   g=x.createLinearGradient(0,IY+22,0,IY+100);
   (id==="true"?[["0","#ff8fc3"],[".5","#ffd27a"],["1","#9fd0ff"]]:id==="hidden"?[["0","#fff"],["1","#ff2d6a"]]:[["0","#fff"],[".45","#ffe08a"],["1","#e8a53a"]]).forEach(([o,col])=>g.addColorStop(+o,col));
   x.lineWidth=6; x.strokeStyle=id==="hidden"?"#5a0f2e":"#a8661c"; x.strokeText(last.rar,IX+28,IY+22); x.fillStyle=g; x.fillText(last.rar,IX+28,IY+22);
-  // 속성 뱃지
-  x.font='700 26px "Noto Sans KR",sans-serif'; const aw=x.measureText(c.attr).width+36;
-  x.fillStyle="rgba(255,255,255,.92)"; rr(0,x,IX+IW-aw-24,IY+28,aw,46,23); x.fill();
-  x.fillStyle=ATTR_COLOR[id]||c.accent||"#c0407f"; x.textAlign="center"; x.fillText(c.attr,IX+IW-aw/2-24,IY+38); x.textAlign="left";
-  // 별, 이름, 제목
-  const by=IY+IH-200;
-  if(last.stars){ x.font='30px sans-serif'; x.fillStyle="#f2a93b"; x.fillText("★".repeat(last.stars),IX+32,by); }
-  x.fillStyle="#4a2b55"; x.font='700 58px "Gowun Batang",serif'; x.fillText(c.name,IX+30,by+40);
-  x.fillStyle="#7a5a86"; x.font='500 30px "Noto Sans KR",sans-serif'; x.fillText(`「${last.title}」 · ${last.label}`,IX+32,by+112);
-  x.fillStyle="#b0306b"; x.font='700 22px "Noto Sans KR",sans-serif'; x.fillText("앙~의 계절 · 2027.01.02",IX+32,by+156);
+  // 안쪽 장식 테두리
+  x.save(); x.strokeStyle=id==="hidden"?"rgba(255,45,106,.55)":"rgba(255,255,255,.75)"; x.lineWidth=2; rr(0,x,IX+14,IY+14,IW-28,IH-28,20); x.stroke(); x.restore();
+  x.textBaseline="top";
+  // 별 / 해골 (흰 테두리)
+  const by=IY+IH-196, SX=IX+34;
+  { const r=STAR_RULE[last.tier]; if(r){ const SZ=54, GAP=4;
+    if(r.k==="skull"){
+      const em=document.createElement("canvas"); em.width=em.height=SZ+12; const e=em.getContext("2d");
+      e.font=`${SZ-6}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`; e.textBaseline="top"; e.fillText("☠️",6,8);
+      const wh=document.createElement("canvas"); wh.width=wh.height=em.width; const w2=wh.getContext("2d"); w2.drawImage(em,0,0); w2.globalCompositeOperation="source-in"; w2.fillStyle="#fff"; w2.fillRect(0,0,wh.width,wh.height);
+      for(let i=0;i<5;i++){ const px=SX-6+i*(SZ+GAP), py=by-8;
+        for(const [dx,dy] of [[-2,0],[2,0],[0,-2],[0,2],[-2,-2],[2,2],[-2,2],[2,-2]]) x.drawImage(wh,px+dx,py+dy);
+        x.drawImage(em,px,py); } }
+    else { x.font=`${SZ}px "Noto Sans KR",sans-serif`; x.textBaseline="top"; const RB=["#ff6fae","#ffb84d","#4fd39a","#5fb4ff","#a98bff"];
+      for(let i=0;i<5;i++){ const on=i<r.n, px=SX+i*(SZ+GAP);
+        x.lineJoin="round"; x.lineWidth=5; x.strokeStyle="#fff"; x.strokeText("★",px,by);
+        x.save(); x.fillStyle=!on?"#ddd2e4":r.k==="rainbow"?RB[i]:"#f5a623"; if(on){ x.shadowColor=r.k==="rainbow"?RB[i]:"#ffc94d"; x.shadowBlur=8; } x.fillText("★",px,by); x.restore(); } } } }
+  // 구분선
+  x.fillStyle="rgba(176,48,107,.18)"; x.fillRect(SX,by+78,IW-68,2);
+  // 이름(좌) · 엔딩 이름(우)
+  const rowY=by+104, RX=IX+IW-34;
+  x.textBaseline="alphabetic";
+  x.fillStyle="#3a1f48"; x.font='700 58px "Gowun Batang",serif'; x.textAlign="left"; x.fillText(c.name,SX,rowY+52);
+  const nameW=x.measureText(c.name).width, maxT=IW-68-nameW-24; let fs=32, tt=`「${last.title}」`;
+  x.font=`700 ${fs}px "Noto Sans KR",sans-serif`; while(x.measureText(tt).width>maxT && fs>20){ fs-=2; x.font=`700 ${fs}px "Noto Sans KR",sans-serif`; }
+  x.fillStyle=id==="hidden"?"#c0174f":"#b0306b"; x.textAlign="right"; x.fillText(tt,RX,rowY+48); x.textAlign="left";
   const url=cv.toDataURL("image/png");
   $("#smImg").src=url; $("#smDl").href=url; $("#smDl").setAttribute("download",`ang-season_${id}_${last.tier||"card"}.png`);
   $("#saveModal").hidden=false;
