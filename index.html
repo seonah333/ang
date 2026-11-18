@@ -135,7 +135,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 .vn-in::before{content:"";position:absolute;inset:4px;border-radius:10px;border:1px dashed #ffc2df;pointer-events:none}
 .face{flex:none;width:68px;text-align:center;position:relative}
 .face .fi{width:68px;height:68px;border-radius:12px;overflow:hidden;border:2px solid #ffb3d9;background:linear-gradient(180deg,#fff,#f4eeff);box-shadow:0 2px 6px #ff8fc344}
-.face .fi .portrait img{transform:scale(3.2);transform-origin:var(--face,50% 22%);object-position:var(--face,50% 22%)}
+.face .fi .portrait img{transform:scale(var(--fs,3.2));transform-origin:var(--face,50% 22%);object-position:var(--face,50% 22%)}
 .face .fi .portrait .ph svg{width:170%;max-width:none;margin-bottom:-18%}
 .face .fn{margin-top:5px;font-size:12px;font-weight:900;color:#c0407f;white-space:nowrap}
 .face.me .fi{display:grid;place-items:center;font-size:26px;color:#ff8fc3}
@@ -274,6 +274,35 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 
 #ending{background:#1e1030}
 #endBg{position:fixed;left:0;right:0;top:0;bottom:0;max-width:440px;margin:0 auto}
+
+.progress{position:relative;z-index:3;display:flex;justify-content:center;gap:6px;margin:-6px 0 12px;font-size:11.5px;color:#7a5a86}
+.progress span{padding:4px 10px;border-radius:99px;background:#ffffffcc;border:1px solid #ffd6ea}
+.progress b{color:#c0407f}
+.progress .pg-done{background:linear-gradient(90deg,#b79bff,#ff8fc3);color:#fff;border-color:transparent;font-weight:900}
+.place.locked{display:flex;align-items:center;background:linear-gradient(135deg,#3a2a4a,#1e1430);cursor:default;padding:3px}
+.place.locked::before{content:"";position:absolute;inset:3px;border-radius:13px;background:repeating-linear-gradient(135deg,#ffffff08 0 10px,#ffffff00 10px 20px)}
+.place.locked .place-name{letter-spacing:.2em}
+.place.locked .place-teaser{opacity:.75}
+.lock-ic{position:absolute;right:22px;top:50%;transform:translateY(-50%);font-size:34px;opacity:.8}
+.place.sp-true{background:linear-gradient(135deg,#fff6c8,#ffd27a 30%,#ff9ccf 60%,#b79bff 80%,#9fd0ff);animation:rainbow 3s linear infinite;background-size:300% 300%}
+.place.sp-hidden{background:linear-gradient(135deg,#ff2d6a,#2a0a1e 40%,#ff2d6a 60%,#120610)}
+@keyframes rainbow{to{background-position:300% 0}}
+.chara.group{display:block}
+.chara.group .chr{position:absolute;bottom:0;height:60%;transform:translateX(-50%);animation:none}
+.chara.group .chr:nth-child(1){left:14%;bottom:6%}.chara.group .chr:nth-child(2){left:38%;z-index:1}
+.chara.group .chr:nth-child(3){left:62%;z-index:1}.chara.group .chr:nth-child(4){left:86%;bottom:6%}
+.chara.solo .chr{height:92%}
+.story-flash{position:absolute;inset:0;z-index:20;background:#fff;pointer-events:none;animation:flash 1.4s ease-out forwards}
+.rar.r-UR{font-size:30px;-webkit-text-stroke:1px #fff;background:linear-gradient(90deg,#ff8fc3,#ffd27a,#7dffc4,#9fd0ff,#b79bff);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 6px #0006)}
+.rar.r-xxx{background:linear-gradient(180deg,#fff,#ff2d6a);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 6px #ff2d6a)}
+#ending[data-sp="true"] .bigcard{background:linear-gradient(135deg,#ff8fc3,#ffd27a,#7dffc4,#9fd0ff,#b79bff,#ff8fc3);background-size:300% 300%;animation:rainbow 3s linear infinite}
+#ending[data-sp="hidden"] .bigcard{background:linear-gradient(135deg,#ff2d6a,#120610 45%,#ff2d6a 55%,#120610);animation:glitch 2.4s infinite}
+#ending[data-sp="hidden"] .bigcard .card-info .cn,#ending[data-sp="hidden"] .bigcard .card-info .stars{color:#4a2b55}
+@keyframes glitch{0%,92%,100%{transform:none;filter:none}93%{transform:translate(-3px,1px);filter:hue-rotate(40deg)}95%{transform:translate(3px,-1px)}97%{transform:translate(-1px,2px);filter:saturate(2)}}
+.res-badge[data-tier="true"]{background:linear-gradient(90deg,#ffd27a,#ff8fc3,#b79bff)}
+.res-badge[data-tier="hidden"]{background:linear-gradient(90deg,#ff2d6a,#4a0f2e)}
+.lock-line{text-align:center;font-size:13px;color:#8a6f86;margin:6px 0 4px;letter-spacing:.02em}
+.place.sp{animation:chIn .6s var(--ease) both}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -344,7 +373,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
         <h2 class="res-title" id="endTitle"></h2>
         <p class="res-quote" id="endDesc"></p>
         <div class="res-div"><i></i>✦<i></i></div>
-        <p class="res-reveal">그리고 밝혀진 충격의 진실<br><b>네 명의 남자는 모두… 앙~ 승완이었다</b></p>
+        <p class="res-reveal" id="endReveal">그리고 밝혀진 충격의 진실<br><b>네 명의 남자는 모두… 앙~ 승완이었다</b></p>
       </div>
       <div class="end-actions">
         <a class="btn-main" id="toInvite" href="#" target="_blank" rel="noopener">초대장 열어보기</a>
@@ -512,6 +541,47 @@ const ENDINGS = {
          low:["썸붕 엔딩","보안검색 엔딩","당신은 공항 보안요원에게 제지당했다.\n그가 멀리서 외쳤다. \"만 원 들고 와!\""] }
 };
 
+/* ===== 진엔딩 · 히든엔딩 ===== */
+const SPECIAL={
+  true:{ name:"앙~ 승완", tag:"진짜 주인공", place:"동교동 177-16 B1", placeEn:"True Ending", attr:"진심", accent:"#ffd27a",
+    cbg:"linear-gradient(180deg,#fff1c4,#ffc2df 60%,#d9c9ff)", filter:"none", tint:"transparent", focus:"50% 15%", face:"43% 20%", fs:2.4, fx:"petal",
+    teaser:"네 개의 운명이 모였다… 마지막 장소가 열렸다" },
+  hidden:{ name:"앙~ 승완", tag:"새벽 3시의 그 녀석", place:"새벽 3시, 편의점 앞", placeEn:"Hidden Ending", attr:"???", accent:"#ff2d6a",
+    cbg:"linear-gradient(180deg,#1a0618,#5a0f2e 60%,#ff2d6a)", filter:"none", tint:"transparent", focus:"50% 10%", face:"47% 17%", fs:2.4, fx:"flash",
+    teaser:"네 번 차인 당신만 들어올 수 있는 곳" }
+};
+Object.assign(CHARS,SPECIAL);
+CONFIG.photos.true="img/true_chr.webp"; CONFIG.photos.hidden="img/hidden_chr.webp";
+ROUTES.true=[{ lines:[
+  ["", "네 개의 운명이 하나로 이어진 밤."],
+  ["", "메시지 맨 아래, 지워져 있던 마지막 주소가 떠올랐다.\n「동교동 177-16 B1」"],
+  ["", "지하로 이어진 계단 끝, 샹들리에가 빛나는 연회장.\n익숙한 네 사람이 나란히 서 있었다."],
+  ["@group",""],
+  ["duke","…늦었군."],["prince","기다렸어요, 레이디."],["exec","시간 딱 맞췄네."],["idol","찾았다, 내 1호 팬!"],
+  ["four","……들켰네."],
+  ["@reveal",""],
+  ["", "눈부신 빛이 걷히자,\n꽃다발을 든 한 사람만 남아 있었다."],
+  ["true","사실… 그 네 명 다 나야."],
+  ["true","대공처럼 무뚝뚝하고, 태자처럼 다정하고,\n이사처럼 허세 부리고, 이돌처럼 관종이지만."],
+  ["true","이 꽃은 진짜야.\n1월 2일 저녁 7시, 여기서 진짜로 기다릴게."]],
+  q:[["꽃 받으러 갈게, 앙~",0,"…약속했다? 앙~"],["네 명 다 데리고 와",0,"걱정 마. 넷이 한 몸이라 입장료는 한 명 거야."]] }];
+ROUTES.hidden=[{ lines:[
+  ["", "네 번의 썸붕. 네 번의 이별."],
+  ["", "새벽 3시, 홍대의 한 편의점 앞.\n당신은 식어 버린 컵라면 앞에 혼자 앉아 있다."],
+  ["", "딸랑— 편의점 문이 열리고,\n빨간 모자를 쓴 누군가가 걸어 나왔다."],
+  ["@solo",""],
+  ["hidden","…넷 다 차였다며? 대단하다 진짜."],
+  ["hidden","대공한테 계단으로 간다 그러고,\n태자한테 무단침입이냐 그러고…"],
+  ["hidden","근데 그거 알아?\n그 네 명, 다 나야."]],
+  q:[["…알고 있었어",0,"…역시. 그래서 일부러 다 찬 거지?"],["그럼 너도 차줄게",0,"그건 안 돼. 내 생일이거든."]] },
+  { lines:[["hidden","1월 2일 저녁 7시, 동교동 177-16 B1.\n거기 술은 너 안 차. 와."]], q:null }];
+const SP_END={
+  true:{label:"진엔딩",title:"진심",rar:"UR",desc:"네 개의 운명 끝에서 찾은 단 하나의 진심.\n\"1월 2일, 꽃 들고 기다릴게.\"",aff:"모든 운명 달성 ✦",
+        reveal:"축하해요! 진엔딩 달성<br><b>이제 진짜 초대장을 열어볼 차례예요</b>"},
+  hidden:{label:"히든엔딩",title:"그래도 와줄 거지",rar:"???",desc:"썸붕 그랜드슬램 달성.\n\"차여도 생일파티는 와야지.\"",aff:"모든 썸붕 달성 ✦",
+        reveal:"히든엔딩 발견!<br><b>상위 1%의 썸붕 장인</b>"}
+};
+
 
 /* ===== 배경 일러스트 (SVG) ===== */
 let uid=0;
@@ -599,14 +669,14 @@ function silhouette(id){
 }
 function portrait(id){
   const c=CHARS[id], src=CONFIG.photos[id], el=document.createElement("div");
-  el.className="portrait"; el.style.setProperty("--focus",c.focus); el.style.setProperty("--face",c.face); el.style.setProperty("--pfilter",c.filter); el.style.setProperty("--ptint",c.tint);
+  el.className="portrait"; el.style.setProperty("--focus",c.focus); el.style.setProperty("--face",c.face); if(c.fs) el.style.setProperty("--fs",c.fs); el.style.setProperty("--pfilter",c.filter); el.style.setProperty("--ptint",c.tint);
   el.innerHTML = src ? `<img src="${src}" alt="${c.name}"><div class="tint"></div>` : `<div class="ph">${silhouette(id)}</div>`;
   return el;
 }
 const ATTR_COLOR={duke:"#3a6ab0",prince:"#b07a1a",exec:"#8a4a1a",idol:"#c0407f"};
-function cardEl(id, stars, sub){
+function cardEl(id, stars, sub, rar){
   const c=CHARS[id], w=document.createElement("div");
-  w.innerHTML=`<div class="card-in" style="--cbg:${c.cbg}"><span class="rar">SSR</span><span class="attr" style="--acc:${ATTR_COLOR[id]}">${c.attr}</span><div class="card-info"><div class="stars">${"★".repeat(stars)}</div><div class="cn">${c.name}</div><div class="ct">${sub}</div></div></div>`;
+  w.innerHTML=`<div class="card-in" style="--cbg:${c.cbg}"><span class="rar r-${(rar||"SSR").replace(/\W/g,"x")}">${rar||"SSR"}</span><span class="attr" style="--acc:${ATTR_COLOR[id]||c.accent}">${c.attr}</span><div class="card-info"><div class="stars">${"★".repeat(stars)}</div><div class="cn">${c.name}</div><div class="ct">${sub}</div></div></div>`;
   w.firstChild.insertBefore(portrait(id), w.firstChild.firstChild);
   return w.firstChild;
 }
@@ -623,7 +693,7 @@ const $=s=>document.querySelector(s);
 function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.id===id)); }
 function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove("show"),1800); }
 const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
-const IDS=Object.keys(CHARS);
+const IDS=["duke","prince","exec","idol"];
 
 /* 타이틀 */
 IDS.forEach(id=>{ const p=document.createElement("div"); p.className="panel"; p.innerHTML=`<div class="pbg" style="background:${CHARS[id].cbg}"></div>`; p.appendChild(portrait(id)); p.insertAdjacentHTML("beforeend",`<div class="glow"></div>`); $("#panels").appendChild(p); });
@@ -631,13 +701,29 @@ particles($("#fxTitle"),"petal",16);
 $("#selBg").innerHTML=bgSVG("dream"); particles($("#fxSel"),"glit",14);
 
 /* 장소 선택 */
-const visited={};
+const visited={}; let RES={};
+try{ RES=JSON.parse(localStorage.getItem("ang_res_v1")||"{}"); }catch(_){ RES={}; }
+function saveRes(){ try{ localStorage.setItem("ang_res_v1",JSON.stringify(RES)); }catch(_){} }
+Object.keys(RES).forEach(id=>{ if(ENDINGS[id]&&ENDINGS[id][RES[id]]) visited[id]=ENDINGS[id][RES[id]][0]; else if(SP_END[id]) visited[id]=SP_END[id].label; });
+function tally(){ const t={high:0,mid:0,low:0,done:0}; IDS.forEach(id=>{ if(RES[id]){t[RES[id]]++;t.done++;} }); return t; }
+function placeCard(id,unlocked){
+  const c=CHARS[id], v=visited[id], b=document.createElement("button");
+  b.className="place"+(v?" done":"")+(SPECIAL[id]?" sp sp-"+id:"");
+  b.setAttribute("aria-label",`${c.place}(으)로 가기`);
+  b.innerHTML=`<div class="place-bg">${bgLayer(id)}</div>${v?`<img class="place-chr" src="img/${id}_chr.webp" alt="">`:""}<div class="place-info"><span class="place-en">${c.placeEn}</span><span class="place-name">${c.place}</span><span class="place-teaser">${v?`<b>${c.name}</b> · ${v}`:c.teaser}</span></div><span class="place-go">${v?"다시 가기":(SPECIAL[id]?"열기":"가기")}</span>`;
+  b.onclick=()=>startRoute(id); return b;
+}
 function drawPlaces(){
-  const g=$("#grid"); g.innerHTML="";
-  IDS.forEach(id=>{ const c=CHARS[id], v=visited[id], b=document.createElement("button");
-    b.className="place"+(v?" done":""); b.setAttribute("aria-label",`${c.place}(으)로 가기`);
-    b.innerHTML=`<div class="place-bg">${bgLayer(id)}</div>${v?`<img class="place-chr" src="img/${id}_chr.webp" alt="">`:""}<div class="place-info"><span class="place-en">${c.placeEn}</span><span class="place-name">${c.place}</span><span class="place-teaser">${v?`<b>${c.name}</b> · ${v}`:c.teaser}</span></div><span class="place-go">${v?"다시 가기":"가기"}</span>`;
-    b.onclick=()=>startRoute(id); g.appendChild(b); });
+  const g=$("#grid"); g.innerHTML=""; const t=tally();
+  IDS.forEach(id=>g.appendChild(placeCard(id)));
+  if(t.high===4) RES.trueU=1; if(t.low===4) RES.hiddenU=1; saveRes();
+  if(RES.trueU) g.appendChild(placeCard("true"));
+  if(RES.hiddenU) g.appendChild(placeCard("hidden"));
+  if(!(RES.trueU&&RES.hiddenU)){
+    const lk=document.createElement("p"); lk.className="lock-line";
+    lk.textContent=(RES.trueU||RES.hiddenU)?"🔒 또 하나의 장소가 잠겨있습니다.":"🔒 다섯번째 장소가 잠겨있습니다.";
+    g.appendChild(lk);
+  }
 }
 drawPlaces();
 
@@ -652,14 +738,28 @@ const MAX=6;
 let st={auto:false};
 function resetStory(id){ clearTimeout(st.autoT); clearInterval(st.timer); st={id,hist:[],score:0,queue:[],typing:false,full:"",timer:null,waiting:false,onDone:null,auto:st.auto||false,autoT:null}; }
 function startRoute(id){
+  if(SPECIAL[id]) return startSpecial(id);
   resetStory(id); const c=CHARS[id];
   $("#bg").innerHTML=bgLayer(id); particles($("#fx"),c.fx,c.fx==="snow"?40:c.fx==="flash"?14:18);
   $("#chara").innerHTML=`<img class="chr" src="img/${id}_chr.webp" alt="${c.name}">`; $("#chara").classList.add("hide");
-  $("#faceImg").innerHTML=""; $("#faceImg").appendChild(portrait(id));
+  $("#faceImg").innerHTML=""; $("#faceImg").appendChild(portrait(id)); $("#faceImg").dataset.sp=id;
+  $("#chara").className="chara";
   $("#affName").textContent=c.name; $("#aff").hidden=true; $("#chapter").textContent=c.placeEn;
   drawHearts(); show("story");
   playLines(ARRIVAL[id], ()=>{ $("#chara").classList.remove("hide"); $("#aff").hidden=false; playLines([[id,c.line]],()=>runBeat(0)); });
 }
+function startSpecial(id){
+  resetStory(id); const c=CHARS[id];
+  $("#bg").innerHTML=bgLayer(id); particles($("#fx"),c.fx,id==="true"?36:16);
+  $("#chara").className="chara hide"; $("#chara").innerHTML=""; $("#faceImg").innerHTML=""; $("#faceImg").dataset.sp="";
+  $("#aff").hidden=true; $("#chapter").textContent=c.placeEn; show("story"); runBeat(0);
+}
+const ACTIONS={
+  "@group":()=>{ const ch=$("#chara"); ch.className="chara group hide"; ch.innerHTML=IDS.map(i=>`<img class="chr" src="img/${i}_chr.webp" alt="">`).join(""); void ch.offsetWidth; ch.classList.remove("hide"); },
+  "@reveal":()=>{ const f=document.createElement("div"); f.className="story-flash"; $("#story").appendChild(f); setTimeout(()=>f.remove(),1400);
+    setTimeout(()=>{ const ch=$("#chara"); ch.className="chara solo hide"; ch.innerHTML=`<img class="chr" src="img/${st.id}_chr.webp" alt="">`; void ch.offsetWidth; ch.classList.remove("hide"); },350); },
+  "@solo":()=>{ const ch=$("#chara"); ch.className="chara solo hide"; ch.innerHTML=`<img class="chr" src="img/${st.id}_chr.webp" alt="">`; void ch.offsetWidth; ch.classList.remove("hide"); }
+};
 function drawHearts(){ $("#hearts").innerHTML=Array.from({length:MAX},(_,i)=>`<span class="${i<st.score?"on":""}">♥</span>`).join(""); }
 
 function playLines(lines,done){ st.queue=lines.slice(); st.onDone=done; nextLine(); }
@@ -668,13 +768,15 @@ function nextLine(){
   if(st.typing){ finishTyping(); return; }
   if(!st.queue.length){ const d=st.onDone; st.onDone=null; d&&d(); return; }
   (st.hist=st.hist||[]).push({q:st.queue.slice(),d:st.onDone,s:st.score,ch:$("#chapter").textContent});
+  if(st.queue[0][0][0]==="@"){ const [a]=st.queue.shift(); ACTIONS[a]&&ACTIONS[a](); return nextLine(); }
   const [sp,t]=st.queue.shift(); setSpeaker(sp); typeText(t);
 }
 function setSpeaker(sp){
   const vn=$("#vn"), face=$("#face");
   vn.classList.toggle("narr", sp===""); face.classList.toggle("me", sp==="me");
-  if(sp==="me"){ $("#faceImg").innerHTML="♡"; $("#faceName").textContent="나"; }
-  else if(sp){ if(!$("#faceImg .portrait")){ $("#faceImg").innerHTML=""; $("#faceImg").appendChild(portrait(sp)); } $("#faceName").textContent=CHARS[sp].name; }
+  if(sp==="me"){ $("#faceImg").innerHTML="♡"; $("#faceImg").dataset.sp="me"; $("#faceName").textContent="나"; }
+  else if(sp==="four"){ face.classList.add("me"); $("#faceImg").innerHTML="✦"; $("#faceImg").dataset.sp="four"; $("#faceName").textContent="네 사람"; }
+  else if(sp){ if($("#faceImg").dataset.sp!==sp){ $("#faceImg").innerHTML=""; $("#faceImg").appendChild(portrait(sp)); $("#faceImg").dataset.sp=sp; } $("#faceName").textContent=CHARS[sp].name; }
 }
 function typeText(t){
   const el=$("#text"); st.full=t; $("#more").style.visibility="hidden";
@@ -698,14 +800,14 @@ document.addEventListener("keydown",e=>{ if($("#story").classList.contains("acti
 
 function runBeat(n){
   const beats=ROUTES[st.id]; if(n>=beats.length) return showEnding();
-  $("#chapter").textContent="Chapter "+(n+1);
-  playLines(beats[n].lines, ()=>askChoice(beats[n].q,n));
+  $("#chapter").textContent=SPECIAL[st.id]?CHARS[st.id].placeEn:"Chapter "+(n+1);
+  playLines(beats[n].lines, ()=>beats[n].q?askChoice(beats[n].q,n):runBeat(n+1));
 }
 function askChoice(q,n){
   st.waiting=true; clearTimeout(st.autoT); $("#more").style.visibility="hidden"; $("#dim").classList.add("on");
   const box=$("#choices"); box.innerHTML="";
   q.forEach(([label,pts,reply],i)=>{ const b=document.createElement("button"); b.className="choice"; b.textContent=label; b.style.animationDelay=(i*90)+"ms";
-    b.onclick=e=>{ e.stopPropagation(); box.innerHTML=""; $("#dim").classList.remove("on"); st.waiting=false; st.score+=pts; drawHearts(); react(pts);
+    b.onclick=e=>{ e.stopPropagation(); box.innerHTML=""; $("#dim").classList.remove("on"); st.waiting=false; st.score+=pts; drawHearts(); if(!SPECIAL[st.id]) react(pts);
       playLines([["me",label],[st.id,reply]],()=>runBeat(n+1)); };
     box.appendChild(b); });
   box.firstChild && box.firstChild.focus({preventScroll:true});
@@ -719,23 +821,39 @@ function react(pts){
 /* ===== 엔딩 ===== */
 let last=null;
 function showEnding(){
+  if(SPECIAL[st.id]) return showSpecialEnding();
   const tier=st.score>=5?"high":st.score>=3?"mid":"low", [label,title,desc]=ENDINGS[st.id][tier];
   const stars=tier==="high"?5:tier==="mid"?4:3;
-  last={id:st.id,label,title}; visited[st.id]=label; drawPlaces();
+  last={id:st.id,label,title}; visited[st.id]=label; RES[st.id]=tier; saveRes(); drawPlaces();
   $("#endBg").innerHTML=bgLayer(st.id); particles($("#fxEnd"),"petal",22);
   const bc=$("#bigcard"); bc.innerHTML=""; bc.appendChild(cardEl(st.id,stars,`「${title}」`));
   $("#endLabel").textContent=label; $("#endLabel").dataset.tier=tier; $("#endTitle").textContent=`「${title}」`;
+  $("#ending").dataset.sp=""; $("#endReveal").innerHTML="그리고 밝혀진 충격의 진실<br><b>네 명의 남자는 모두… 앙~ 승완이었다</b>";
   $("#endAff").innerHTML=`호감도 <b>${"♥".repeat(st.score)}</b><s>${"♥".repeat(MAX-st.score)}</s>`; $("#endDesc").textContent=desc;
+  show("ending"); $("#ending").scrollTop=0; const fl=$("#flash"); fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go");
+}
+function showSpecialEnding(){
+  const id=st.id, e=SP_END[id];
+  last={id,label:e.label,title:e.title}; visited[id]=e.label; RES[id]="sp"; saveRes(); drawPlaces();
+  $("#ending").dataset.sp=id;
+  $("#endBg").innerHTML=bgLayer(id); particles($("#fxEnd"),id==="true"?"petal":"glit",id==="true"?30:20);
+  $("#bigcard").innerHTML=""; $("#bigcard").appendChild(cardEl(id,id==="true"?6:0,`「${e.title}」`,e.rar));
+  $("#endLabel").textContent=e.label; $("#endLabel").dataset.tier=id; $("#endTitle").textContent=`「${e.title}」`;
+  $("#endAff").textContent=e.aff; $("#endDesc").textContent=e.desc; $("#endReveal").innerHTML=e.reveal;
   show("ending"); $("#ending").scrollTop=0; const fl=$("#flash"); fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go");
 }
 if(CONFIG.inviteUrl) $("#toInvite").href=CONFIG.inviteUrl;
 $("#toInvite").onclick=e=>{ if(!CONFIG.inviteUrl){ e.preventDefault(); toast("초대장은 곧 열려요. 조금만 기다려 주세요"); } };
 $("#homeBtn").onclick=()=>show("title");
+/* 미리보기: 주소 끝에 #true-ending 또는 #hidden-ending */
+function previewFromHash(){ const h=location.hash.replace("#",""); if(h==="true-ending") startRoute("true"); else if(h==="hidden-ending") startRoute("hidden"); }
+window.addEventListener("hashchange",previewFromHash); previewFromHash();
 $("#endAgain").onclick=()=>{ show("select"); $("#select").scrollTop=0; };
 $("#shareBtn").onclick=async()=>{
   if(!CONFIG.shareUrl){ toast("공유 링크는 곧 준비돼요"); return; }
   const c=last?CHARS[last.id]:null;
-  const msg=`[앙~의 계절] 1월 2일, 너에게 고백할게${c?`\n나는 ${c.name}의 「${last.title}」 카드를 얻었어!`:""}\n너도 공략해봐 → ${CONFIG.shareUrl}`;
+  const brag=last&&last.id==="hidden"?`\n나 썸붕 그랜드슬램 달성함… 히든엔딩 봄 ㅋㅋ`:last&&last.id==="true"?`\n나 진엔딩 봤다. [UR] 앙~ 승완 「진심」 획득!`:(c?`\n나는 ${c.name}의 「${last.title}」 카드를 얻었어!`:"");
+  const msg=`[앙~의 계절] 1월 2일, 너에게 고백할게${brag}\n너도 공략해봐 → ${CONFIG.shareUrl}`;
   try{ await navigator.clipboard.writeText(msg); toast("링크를 복사했어요. 단톡방에 붙여넣어 주세요"); }
   catch(_){ toast("복사가 막혀 있어요. 주소를 직접 복사해 주세요"); } };
 $("#againBtn").onclick=()=>{ show("select"); $("#select").scrollTop=0; };
