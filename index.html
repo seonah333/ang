@@ -332,8 +332,9 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 .place.sp-hidden .place-teaser .tiers{background:linear-gradient(90deg,#ff2d6a,#7a0f3e)}
 
 .bigcard{position:relative}
-.save-card{position:absolute;right:-10px;bottom:-12px;z-index:5;display:flex;align-items:center;gap:5px;height:34px;padding:0 13px 0 11px;border-radius:99px;font-size:12px;font-weight:900;color:#fff;
-  background:linear-gradient(180deg,#ffa8d2,#ff6fae);border:2px solid #fff;box-shadow:0 4px 12px #0005;animation:fadeIn .4s 1.2s both}
+.save-slot{position:relative;z-index:3;display:flex;justify-content:center;margin-top:10px}
+.save-card{display:flex;align-items:center;gap:5px;height:34px;padding:0 13px 0 11px;border-radius:99px;font-size:12px;font-weight:900;color:#fff;
+  background:#ffffff26;border:1.5px solid #ffffffb3;backdrop-filter:blur(6px);box-shadow:0 2px 10px #0004;animation:fadeIn .4s 1.2s both}
 .save-card:active{transform:scale(.95)}
 .save-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:#140a20d9}
 .sm-box{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
@@ -406,6 +407,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
     <div class="fx" id="fxEnd" aria-hidden="true"></div>
     <p class="get">Card Get!</p>
     <div class="bigcard card" id="bigcard"></div>
+    <div class="save-slot" id="saveSlot"></div>
     <div class="end-box">
       <div class="res">
         <div class="res-top"><span class="res-badge" id="endLabel"></span><span class="res-aff" id="endAff"></span></div>
@@ -906,7 +908,7 @@ function showSpecialEnding(){
 /* ===== 카드 저장 ===== */
 function addSaveBtn(){ const b=document.createElement("button"); b.className="save-card"; b.type="button"; b.setAttribute("aria-label","카드 저장하기");
   b.innerHTML=`<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>카드 저장</span>`;
-  b.onclick=e=>{ e.stopPropagation(); saveCard().catch(err=>{ console.error(err); toast("카드 이미지를 만들지 못했어요. 화면을 캡처해 주세요"); }); }; $("#bigcard").appendChild(b); }
+  b.onclick=e=>{ e.stopPropagation(); saveCard().catch(err=>{ console.error(err); toast("카드 이미지를 만들지 못했어요. 화면을 캡처해 주세요"); }); }; $("#saveSlot").innerHTML=""; $("#saveSlot").appendChild(b); }
 const loadImg=src=>new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=src; });
 function rr(x,c,X,Y,W,H,r){ c.beginPath(); c.moveTo(X+r,Y); c.arcTo(X+W,Y,X+W,Y+H,r); c.arcTo(X+W,Y+H,X,Y+H,r); c.arcTo(X,Y+H,X,Y,r); c.arcTo(X,Y,X+W,Y,r); c.closePath(); }
 async function saveCard(){
