@@ -303,6 +303,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 .res-badge[data-tier="hidden"]{background:linear-gradient(90deg,#ff2d6a,#4a0f2e)}
 .lock-line{text-align:center;font-size:13px;color:#8a6f86;margin:6px 0 4px;letter-spacing:.02em}
 .place.sp{animation:chIn .6s var(--ease) both}
+.no-invite{padding:14px 12px;border-radius:16px;background:#2a163fcc;border:2px dashed #ffb3d988;color:#fff;font-weight:900;font-size:15px;text-align:center}
+.no-invite small{display:block;margin-top:4px;font-weight:500;font-size:12px;color:#ffd6ea}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -376,6 +378,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
         <p class="res-reveal" id="endReveal">그리고 밝혀진 충격의 진실<br><b>네 명의 남자는 모두… 앙~ 승완이었다</b></p>
       </div>
       <div class="end-actions">
+        <p class="no-invite" id="noInvite" hidden>💔 썸붕이라 초대장을 받지 못했어요<small>다른 장소에서 마음을 얻어 보세요… 아니면, 끝까지 차여 보든가?</small></p>
         <a class="btn-main" id="toInvite" href="#" target="_blank" rel="noopener">초대장 열어보기</a>
         <div class="end-row">
           <button class="btn-sub" id="endAgain">다른 장소 가보기</button>
@@ -579,7 +582,7 @@ const SP_END={
   true:{label:"진엔딩",title:"진심",rar:"UR",desc:"네 개의 운명 끝에서 찾은 단 하나의 진심.\n\"1월 2일, 꽃 들고 기다릴게.\"",aff:"모든 운명 달성 ✦",
         reveal:"축하해요! 진엔딩 달성<br><b>이제 진짜 초대장을 열어볼 차례예요</b>"},
   hidden:{label:"히든엔딩",title:"그래도 와줄 거지",rar:"???",desc:"썸붕 그랜드슬램 달성.\n\"차여도 생일파티는 와야지.\"",aff:"모든 썸붕 달성 ✦",
-        reveal:"히든엔딩 발견!<br><b>상위 1%의 썸붕 장인</b>"}
+        reveal:"히든엔딩 발견! 상위 1%의 썸붕 장인<br><b>끝까지 차인 당신에게만 주는 초대장이에요</b>"}
 };
 
 
@@ -828,14 +831,14 @@ function showEnding(){
   $("#endBg").innerHTML=bgLayer(st.id); particles($("#fxEnd"),"petal",22);
   const bc=$("#bigcard"); bc.innerHTML=""; bc.appendChild(cardEl(st.id,stars,`「${title}」`));
   $("#endLabel").textContent=label; $("#endLabel").dataset.tier=tier; $("#endTitle").textContent=`「${title}」`;
-  $("#ending").dataset.sp=""; $("#endReveal").innerHTML="그리고 밝혀진 충격의 진실<br><b>네 명의 남자는 모두… 앙~ 승완이었다</b>";
+  $("#ending").dataset.sp=""; $("#toInvite").hidden=tier==="low"; $("#noInvite").hidden=tier!=="low"; $("#endReveal").innerHTML="그리고 밝혀진 충격의 진실<br><b>네 명의 남자는 모두… 앙~ 승완이었다</b>";
   $("#endAff").innerHTML=`호감도 <b>${"♥".repeat(st.score)}</b><s>${"♥".repeat(MAX-st.score)}</s>`; $("#endDesc").textContent=desc;
   show("ending"); $("#ending").scrollTop=0; const fl=$("#flash"); fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go");
 }
 function showSpecialEnding(){
   const id=st.id, e=SP_END[id];
   last={id,label:e.label,title:e.title}; visited[id]=e.label; RES[id]="sp"; saveRes(); drawPlaces();
-  $("#ending").dataset.sp=id;
+  $("#ending").dataset.sp=id; $("#toInvite").hidden=false; $("#noInvite").hidden=true;
   $("#endBg").innerHTML=bgLayer(id); particles($("#fxEnd"),id==="true"?"petal":"glit",id==="true"?30:20);
   $("#bigcard").innerHTML=""; $("#bigcard").appendChild(cardEl(id,id==="true"?6:0,`「${e.title}」`,e.rar));
   $("#endLabel").textContent=e.label; $("#endLabel").dataset.tier=id; $("#endTitle").textContent=`「${e.title}」`;
