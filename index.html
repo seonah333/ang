@@ -330,6 +330,18 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 .pc-hint{display:none;position:fixed;left:50%;bottom:6px;transform:translateX(-50%);font-size:12px;color:#ffffffb3;letter-spacing:.04em;white-space:nowrap}
 .place.sp .place-teaser .tiers{padding:2px 8px;border-radius:99px;color:#fff;font-size:10.5px;font-weight:900;background:linear-gradient(90deg,#ffd27a,#ff8fc3,#b79bff)}
 .place.sp-hidden .place-teaser .tiers{background:linear-gradient(90deg,#ff2d6a,#7a0f3e)}
+
+.bigcard{position:relative}
+.save-card{position:absolute;right:-10px;bottom:-12px;z-index:5;display:flex;align-items:center;gap:5px;height:34px;padding:0 13px 0 11px;border-radius:99px;font-size:12px;font-weight:900;color:#fff;
+  background:linear-gradient(180deg,#ffa8d2,#ff6fae);border:2px solid #fff;box-shadow:0 4px 12px #0005;animation:fadeIn .4s 1.2s both}
+.save-card:active{transform:scale(.95)}
+.save-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:#140a20d9}
+.sm-box{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.sm-box img{width:78%;border-radius:16px;box-shadow:0 12px 40px #000a;-webkit-touch-callout:default}
+.sm-box .btn-main{text-decoration:none;width:100%}
+.sm-box .btn-sub{width:60%}
+.sm-hint{font-size:12px;line-height:1.6;color:#ffd6ea}
+.sm-hint b{color:#fff}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -446,6 +458,14 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
     <div class="after"><button class="btn-sub" id="againBtn">다른 장소 가보기</button></div>
   </section>
 
+  <div class="save-modal" id="saveModal" hidden>
+    <div class="sm-box" role="dialog" aria-label="카드 저장">
+      <img id="smImg" alt="저장할 카드 이미지">
+      <a class="btn-main" id="smDl" download="ang_card.png">이미지 저장하기</a>
+      <p class="sm-hint">저장이 안 되면 이미지를 <b>길게 눌러</b> 저장하세요<br>(카카오톡·인스타 앱 안에서는 길게 누르기만 돼요)</p>
+      <button class="btn-sub" id="smClose">닫기</button>
+    </div>
+  </div>
   <div class="toast" id="toast" role="status"></div>
 </div>
 
@@ -572,10 +592,10 @@ const ENDINGS = {
 /* ===== 진엔딩 · 히든엔딩 ===== */
 const SPECIAL={
   true:{ name:"앙~ 승완", tag:"진짜 주인공", place:"동교동 177-16 B1", placeEn:"True Ending", attr:"진심", accent:"#ffd27a",
-    cbg:"linear-gradient(180deg,#fff1c4,#ffc2df 60%,#d9c9ff)", filter:"none", tint:"transparent", focus:"50% 15%", face:"43% 20%", fs:2.4, fx:"petal",
+    cbg:"url(img/true_bg.jpg) 50% 40%/cover", filter:"none", tint:"transparent", focus:"50% 15%", face:"43% 20%", fs:2.4, fx:"petal",
     teaser:"네 개의 운명이 모였다… 마지막 장소가 열렸다" },
   hidden:{ name:"앙~ 승완", tag:"새벽 3시의 그 녀석", place:"새벽 3시, 편의점 앞", placeEn:"Hidden Ending", attr:"???", accent:"#ff2d6a",
-    cbg:"linear-gradient(180deg,#1a0618,#5a0f2e 60%,#ff2d6a)", filter:"none", tint:"transparent", focus:"50% 10%", face:"47% 17%", fs:2.4, fx:"flash",
+    cbg:"url(img/hidden_bg.jpg) 30% 50%/cover", filter:"none", tint:"transparent", focus:"50% 10%", face:"47% 17%", fs:2.4, fx:"flash",
     teaser:"네 번 차인 당신만 들어올 수 있는 곳" }
 };
 Object.assign(CHARS,SPECIAL);
@@ -866,7 +886,7 @@ function showEnding(){
   const stars=tier==="high"?5:tier==="mid"?4:3;
   last={id:st.id,label,title}; RES[st.id]=tier; RES.seen=RES.seen||{}; (RES.seen[st.id]=RES.seen[st.id]||[]); if(!RES.seen[st.id].includes(tier)) RES.seen[st.id].push(tier); saveRes(); refreshVisited(); drawPlaces();
   $("#endBg").innerHTML=bgLayer(st.id); particles($("#fxEnd"),"petal",22);
-  const bc=$("#bigcard"); bc.innerHTML=""; bc.appendChild(cardEl(st.id,stars,`「${title}」`));
+  const bc=$("#bigcard"); bc.innerHTML=""; bc.appendChild(cardEl(st.id,stars,`「${title}」`)); last.stars=stars; last.rar="SSR"; last.tier=tier; addSaveBtn();
   $("#endLabel").textContent=label; $("#endLabel").dataset.tier=tier; $("#endTitle").textContent=`「${title}」`;
   $("#ending").dataset.sp=""; $("#toInvite").hidden=tier==="low"; $("#noInvite").hidden=tier!=="low"; $("#endReveal").innerHTML="그리고 밝혀진 충격의 진실<br><b>네 명의 남자는 모두… 앙~ 승완이었다</b>";
   $("#endAff").innerHTML=`호감도 <b>${"♥".repeat(st.score)}</b><s>${"♥".repeat(MAX-st.score)}</s>`; $("#endDesc").textContent=desc;
@@ -877,11 +897,63 @@ function showSpecialEnding(){
   last={id,label:e.label,title:e.title}; RES[id]="sp"; saveRes(); refreshVisited(); drawPlaces();
   $("#ending").dataset.sp=id; $("#toInvite").hidden=false; $("#noInvite").hidden=true;
   $("#endBg").innerHTML=bgLayer(id); particles($("#fxEnd"),id==="true"?"petal":"glit",id==="true"?30:20);
-  $("#bigcard").innerHTML=""; $("#bigcard").appendChild(cardEl(id,id==="true"?6:0,`「${e.title}」`,e.rar));
+  $("#bigcard").innerHTML=""; $("#bigcard").appendChild(cardEl(id,id==="true"?6:0,`「${e.title}」`,e.rar)); last.stars=id==="true"?6:0; last.rar=e.rar; last.tier=id; addSaveBtn();
   $("#endLabel").textContent=e.label; $("#endLabel").dataset.tier=id; $("#endTitle").textContent=`「${e.title}」`;
   $("#endAff").textContent=e.aff; $("#endDesc").textContent=e.desc; $("#endReveal").innerHTML=e.reveal;
   show("ending"); $("#ending").scrollTop=0; const fl=$("#flash"); fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go");
 }
+
+/* ===== 카드 저장 ===== */
+function addSaveBtn(){ const b=document.createElement("button"); b.className="save-card"; b.type="button"; b.setAttribute("aria-label","카드 저장하기");
+  b.innerHTML=`<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>카드 저장</span>`;
+  b.onclick=e=>{ e.stopPropagation(); saveCard().catch(err=>{ console.error(err); toast("카드 이미지를 만들지 못했어요. 화면을 캡처해 주세요"); }); }; $("#bigcard").appendChild(b); }
+const loadImg=src=>new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=src; });
+function rr(x,c,X,Y,W,H,r){ c.beginPath(); c.moveTo(X+r,Y); c.arcTo(X+W,Y,X+W,Y+H,r); c.arcTo(X+W,Y+H,X,Y+H,r); c.arcTo(X,Y+H,X,Y,r); c.arcTo(X,Y,X+W,Y,r); c.closePath(); }
+async function saveCard(){
+  if(!last) return; toast("카드를 만드는 중이에요…");
+  try{ await document.fonts.ready; }catch(_){}
+  const id=last.id, c=CHARS[id], sp=SPECIAL[id];
+  const W=720,H=1040,P=22, cv=document.createElement("canvas"); cv.width=W; cv.height=H; const x=cv.getContext("2d");
+  // 배경
+  x.fillStyle="#1e1030"; x.fillRect(0,0,W,H);
+  // 테두리
+  let g=x.createLinearGradient(0,0,W,H);
+  const BORDER=id==="true"?["#ff8fc3","#ffd27a","#7dffc4","#9fd0ff","#b79bff"]:id==="hidden"?["#ff2d6a","#120610","#ff2d6a","#120610"]:["#fff7d6","#e8b85a","#fff1c4","#c9973a","#fff1c4"];
+  BORDER.forEach((col,i)=>g.addColorStop(i/(BORDER.length-1),col)); x.fillStyle=g; rr(0,x,0,0,W,H,40); x.fill();
+  // 내부
+  const IX=P,IY=P,IW=W-2*P,IH=H-2*P; x.save(); rr(0,x,IX,IY,IW,IH,28); x.clip();
+  const BG=id==="true"?["#fff1c4","#ffc2df","#d9c9ff"]:id==="hidden"?["#1a0618","#5a0f2e","#ff2d6a"]:["#2a1640","#2a1640","#2a1640"];
+  g=x.createLinearGradient(0,IY,0,IY+IH); BG.forEach((col,i)=>g.addColorStop(i/2,col)); x.fillStyle=g; x.fillRect(IX,IY,IW,IH);
+  if(sp){ const bg=await loadImg(`img/${id}_bg.jpg`); const bs=Math.max(IW/bg.width,IH/bg.height); const bx=id==="hidden"?.3:.5, byy=id==="hidden"?.5:.4;
+    x.drawImage(bg, IX+(IW-bg.width*bs)*bx, IY+(IH-bg.height*bs)*byy, bg.width*bs, bg.height*bs); }
+  const img=await loadImg(CONFIG.photos[id]);
+  const [fx,fy]=(c.focus||"50% 30%").split(" ").map(v=>parseFloat(v)/100);
+  const s=Math.max(IW/img.width,IH/img.height), dw=img.width*s, dh=img.height*s;
+  x.drawImage(img, IX+(IW-dw)*fx, IY+(IH-dh)*fy, dw, dh);
+  // 하단 패널
+  g=x.createLinearGradient(0,IY+IH-300,0,IY+IH); g.addColorStop(0,"rgba(255,255,255,0)"); g.addColorStop(.38,"rgba(255,255,255,.93)"); g.addColorStop(1,"#fff");
+  x.fillStyle=g; x.fillRect(IX,IY+IH-300,IW,300); x.restore();
+  // 등급
+  x.font='italic 900 74px "Noto Sans KR",sans-serif'; x.textBaseline="top";
+  g=x.createLinearGradient(0,IY+22,0,IY+100);
+  (id==="true"?[["0","#ff8fc3"],[".5","#ffd27a"],["1","#9fd0ff"]]:id==="hidden"?[["0","#fff"],["1","#ff2d6a"]]:[["0","#fff"],[".45","#ffe08a"],["1","#e8a53a"]]).forEach(([o,col])=>g.addColorStop(+o,col));
+  x.lineWidth=6; x.strokeStyle=id==="hidden"?"#5a0f2e":"#a8661c"; x.strokeText(last.rar,IX+28,IY+22); x.fillStyle=g; x.fillText(last.rar,IX+28,IY+22);
+  // 속성 뱃지
+  x.font='700 26px "Noto Sans KR",sans-serif'; const aw=x.measureText(c.attr).width+36;
+  x.fillStyle="rgba(255,255,255,.92)"; rr(0,x,IX+IW-aw-24,IY+28,aw,46,23); x.fill();
+  x.fillStyle=ATTR_COLOR[id]||c.accent||"#c0407f"; x.textAlign="center"; x.fillText(c.attr,IX+IW-aw/2-24,IY+38); x.textAlign="left";
+  // 별, 이름, 제목
+  const by=IY+IH-200;
+  if(last.stars){ x.font='30px sans-serif'; x.fillStyle="#f2a93b"; x.fillText("★".repeat(last.stars),IX+32,by); }
+  x.fillStyle="#4a2b55"; x.font='700 58px "Gowun Batang",serif'; x.fillText(c.name,IX+30,by+40);
+  x.fillStyle="#7a5a86"; x.font='500 30px "Noto Sans KR",sans-serif'; x.fillText(`「${last.title}」 · ${last.label}`,IX+32,by+112);
+  x.fillStyle="#b0306b"; x.font='700 22px "Noto Sans KR",sans-serif'; x.fillText("앙~의 계절 · 2027.01.02",IX+32,by+156);
+  const url=cv.toDataURL("image/png");
+  $("#smImg").src=url; $("#smDl").href=url; $("#smDl").setAttribute("download",`ang-season_${id}_${last.tier||"card"}.png`);
+  $("#saveModal").hidden=false;
+}
+$("#smClose").onclick=()=>{ $("#saveModal").hidden=true; };
+$("#saveModal").onclick=e=>{ if(e.target.id==="saveModal") $("#saveModal").hidden=true; };
 if(CONFIG.inviteUrl) $("#toInvite").href=CONFIG.inviteUrl;
 $("#toInvite").onclick=e=>{ if(!CONFIG.inviteUrl){ e.preventDefault(); toast("초대장은 곧 열려요. 조금만 기다려 주세요"); } };
 $("#homeBtn").onclick=()=>show("title");
