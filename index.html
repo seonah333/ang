@@ -745,7 +745,7 @@ function starHTML(tier){ const r=STAR_RULE[tier]; if(!r) return "";
   return `<span class="st-on ${r.k==="rainbow"?"st-rb":""}">${"★".repeat(r.n)}</span><span class="st-off">${"★".repeat(5-r.n)}</span>`; }
 function cardEl(id, stars, sub, rar){
   const c=CHARS[id], w=document.createElement("div");
-  w.innerHTML=`<div class="card-in" style="--cbg:${c.cbg}"><span class="rar r-${(rar||"SSR").replace(/\W/g,"x")}">${rar||"SSR"}</span><span class="attr" style="--acc:${ATTR_COLOR[id]||c.accent}">${c.attr}</span><div class="card-info"><div class="stars">${typeof stars==="string"?starHTML(stars):"★".repeat(stars)}</div><div class="ci-row"><div class="cn">${c.name}</div><div class="ct">${sub}</div></div></div></div>`;
+  w.innerHTML=`<div class="card-in" style="--cbg:${c.cbg}"><span class="rar r-${(rar||"SSR").replace(/\W/g,"x")}">${rar||"SSR"}</span><div class="card-info"><div class="stars">${typeof stars==="string"?starHTML(stars):"★".repeat(stars)}</div><div class="ci-row"><div class="cn">${c.name}</div><div class="ct">${sub}</div></div></div></div>`;
   w.firstChild.insertBefore(portrait(id), w.firstChild.firstChild);
   return w.firstChild;
 }
