@@ -305,6 +305,29 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 .place.sp{animation:chIn .6s var(--ease) both}
 .no-invite{padding:14px 12px;border-radius:16px;background:#2a163fcc;border:2px dashed #ffb3d988;color:#fff;font-weight:900;font-size:15px;text-align:center}
 .no-invite small{display:block;margin-top:4px;font-weight:500;font-size:12px;color:#ffd6ea}
+
+#selBg,#fxSel{position:fixed;left:0;right:0;top:0;bottom:0;max-width:440px;margin:0 auto}
+.screen{overflow-x:hidden}
+#ending .rays{position:fixed}
+.place-teaser .tiers{display:inline-flex;flex-wrap:wrap;gap:4px;margin-left:6px;vertical-align:middle}
+.tier{font-size:10.5px;font-weight:900;padding:2px 7px;border-radius:99px;color:#fff;text-shadow:none}
+.tier.t-high{background:linear-gradient(90deg,#b79bff,#ff8fc3)}
+.tier.t-mid{background:linear-gradient(90deg,#8fc8ff,#b79bff)}
+.tier.t-low{background:linear-gradient(90deg,#ffc56a,#ff9a7a)}
+
+/* ===== 반응형: PC/태블릿 ===== */
+.app{transform:translateZ(0)}
+@media (min-width:600px){
+  body{background:#2a163f}
+  body::before{content:"";position:fixed;inset:-40px;background:url(img/room_bg.jpg) center/cover;filter:blur(22px) brightness(.8) saturate(1.1);z-index:-1}
+  body::after{content:"";position:fixed;inset:0;background:radial-gradient(60% 80% at 50% 50%,#2a163f00,#2a163fb3);z-index:-1;pointer-events:none}
+  .app{box-shadow:0 0 0 1px #ffffff33,0 0 80px #ff8fc355,0 30px 80px #0008}
+  .pc-hint{display:block}
+}
+@media (min-width:600px) and (min-height:760px){
+  .app{height:min(100dvh - 40px,932px);min-height:0;margin-top:20px;border-radius:28px}
+}
+.pc-hint{display:none;position:fixed;left:50%;bottom:6px;transform:translateX(-50%);font-size:12px;color:#ffffffb3;letter-spacing:.04em;white-space:nowrap}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -707,13 +730,22 @@ $("#selBg").innerHTML=bgSVG("dream"); particles($("#fxSel"),"glit",14);
 const visited={}; let RES={};
 try{ RES=JSON.parse(localStorage.getItem("ang_res_v1")||"{}"); }catch(_){ RES={}; }
 function saveRes(){ try{ localStorage.setItem("ang_res_v1",JSON.stringify(RES)); }catch(_){} }
-Object.keys(RES).forEach(id=>{ if(ENDINGS[id]&&ENDINGS[id][RES[id]]) visited[id]=ENDINGS[id][RES[id]][0]; else if(SP_END[id]) visited[id]=SP_END[id].label; });
+RES.seen=RES.seen||{};
+Object.keys(RES).forEach(id=>{ if(ENDINGS[id]&&ENDINGS[id][RES[id]]){ (RES.seen[id]=RES.seen[id]||[]); if(!RES.seen[id].includes(RES[id])) RES.seen[id].push(RES[id]); } });
+const TIER_ORDER=["high","mid","low"];
+function seenText(id){
+  if(SP_END[id]) return RES[id]?SP_END[id].label:"";
+  const s=(RES.seen[id]||[]).slice().sort((a,b)=>TIER_ORDER.indexOf(a)-TIER_ORDER.indexOf(b));
+  return s.map(k=>`<span class="tier t-${k}">${ENDINGS[id][k][0]}</span>`).join("");
+}
+function refreshVisited(){ IDS.concat(Object.keys(SPECIAL)).forEach(id=>{ const s=seenText(id); if(s) visited[id]=s; }); }
+refreshVisited();
 function tally(){ const t={high:0,mid:0,low:0,done:0}; IDS.forEach(id=>{ if(RES[id]){t[RES[id]]++;t.done++;} }); return t; }
 function placeCard(id,unlocked){
   const c=CHARS[id], v=visited[id], b=document.createElement("button");
   b.className="place"+(v?" done":"")+(SPECIAL[id]?" sp sp-"+id:"");
   b.setAttribute("aria-label",`${c.place}(으)로 가기`);
-  b.innerHTML=`<div class="place-bg">${bgLayer(id)}</div>${v?`<img class="place-chr" src="img/${id}_chr.webp" alt="">`:""}<div class="place-info"><span class="place-en">${c.placeEn}</span><span class="place-name">${c.place}</span><span class="place-teaser">${v?`<b>${c.name}</b> · ${v}`:c.teaser}</span></div><span class="place-go">${v?"다시 가기":(SPECIAL[id]?"열기":"가기")}</span>`;
+  b.innerHTML=`<div class="place-bg">${bgLayer(id)}</div>${v?`<img class="place-chr" src="img/${id}_chr.webp" alt="">`:""}<div class="place-info"><span class="place-en">${c.placeEn}</span><span class="place-name">${c.place}</span><span class="place-teaser">${v?`<b>${c.name}</b><span class="tiers">${v}</span>`:c.teaser}</span></div><span class="place-go">${v?"다시 가기":(SPECIAL[id]?"열기":"가기")}</span>`;
   b.onclick=()=>startRoute(id); return b;
 }
 function drawPlaces(){
@@ -827,7 +859,7 @@ function showEnding(){
   if(SPECIAL[st.id]) return showSpecialEnding();
   const tier=st.score>=5?"high":st.score>=3?"mid":"low", [label,title,desc]=ENDINGS[st.id][tier];
   const stars=tier==="high"?5:tier==="mid"?4:3;
-  last={id:st.id,label,title}; visited[st.id]=label; RES[st.id]=tier; saveRes(); drawPlaces();
+  last={id:st.id,label,title}; RES[st.id]=tier; RES.seen=RES.seen||{}; (RES.seen[st.id]=RES.seen[st.id]||[]); if(!RES.seen[st.id].includes(tier)) RES.seen[st.id].push(tier); saveRes(); refreshVisited(); drawPlaces();
   $("#endBg").innerHTML=bgLayer(st.id); particles($("#fxEnd"),"petal",22);
   const bc=$("#bigcard"); bc.innerHTML=""; bc.appendChild(cardEl(st.id,stars,`「${title}」`));
   $("#endLabel").textContent=label; $("#endLabel").dataset.tier=tier; $("#endTitle").textContent=`「${title}」`;
@@ -837,7 +869,7 @@ function showEnding(){
 }
 function showSpecialEnding(){
   const id=st.id, e=SP_END[id];
-  last={id,label:e.label,title:e.title}; visited[id]=e.label; RES[id]="sp"; saveRes(); drawPlaces();
+  last={id,label:e.label,title:e.title}; RES[id]="sp"; saveRes(); refreshVisited(); drawPlaces();
   $("#ending").dataset.sp=id; $("#toInvite").hidden=false; $("#noInvite").hidden=true;
   $("#endBg").innerHTML=bgLayer(id); particles($("#fxEnd"),id==="true"?"petal":"glit",id==="true"?30:20);
   $("#bigcard").innerHTML=""; $("#bigcard").appendChild(cardEl(id,id==="true"?6:0,`「${e.title}」`,e.rar));
@@ -877,5 +909,6 @@ $("#rsvpForm").addEventListener("submit",async e=>{ e.preventDefault(); const t=
   try{ await navigator.clipboard.writeText(t); toast("복사했어요. 단톡방에 붙여넣어 주세요"); }
   catch(_){ const r=document.createRange(); r.selectNodeContents($("#preview")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); toast("메시지를 길게 눌러 복사해 주세요"); } });
 </script>
+<p class="pc-hint">📱 모바일에서 플레이하면 더 생생해요</p>
 </body>
 </html>
