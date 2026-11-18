@@ -328,6 +328,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
   .app{height:min(100dvh - 40px,932px);min-height:0;margin-top:20px;border-radius:28px}
 }
 .pc-hint{display:none;position:fixed;left:50%;bottom:6px;transform:translateX(-50%);font-size:12px;color:#ffffffb3;letter-spacing:.04em;white-space:nowrap}
+.place.sp .place-teaser .tiers{padding:2px 8px;border-radius:99px;color:#fff;font-size:10.5px;font-weight:900;background:linear-gradient(90deg,#ffd27a,#ff8fc3,#b79bff)}
+.place.sp-hidden .place-teaser .tiers{background:linear-gradient(90deg,#ff2d6a,#7a0f3e)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -751,7 +753,8 @@ function placeCard(id,unlocked){
 function drawPlaces(){
   const g=$("#grid"); g.innerHTML=""; const t=tally();
   IDS.forEach(id=>g.appendChild(placeCard(id)));
-  if(t.high===4) RES.trueU=1; if(t.low===4) RES.hiddenU=1; saveRes();
+  const seenAll=k=>IDS.every(i=>(RES.seen&&RES.seen[i]||[]).includes(k));
+  if(t.high===4||seenAll("high")) RES.trueU=1; if(t.low===4||seenAll("low")) RES.hiddenU=1; saveRes();
   if(RES.trueU) g.appendChild(placeCard("true"));
   if(RES.hiddenU) g.appendChild(placeCard("hidden"));
   if(!(RES.trueU&&RES.hiddenU)){
@@ -802,8 +805,8 @@ function nextLine(){
   clearTimeout(st.autoT);
   if(st.typing){ finishTyping(); return; }
   if(!st.queue.length){ const d=st.onDone; st.onDone=null; d&&d(); return; }
-  (st.hist=st.hist||[]).push({q:st.queue.slice(),d:st.onDone,s:st.score,ch:$("#chapter").textContent});
   if(st.queue[0][0][0]==="@"){ const [a]=st.queue.shift(); ACTIONS[a]&&ACTIONS[a](); return nextLine(); }
+  (st.hist=st.hist||[]).push({q:st.queue.slice(),d:st.onDone,s:st.score,ch:$("#chapter").textContent,cc:$("#chara").className,ch2:$("#chara").innerHTML,af:$("#aff").hidden});
   const [sp,t]=st.queue.shift(); setSpeaker(sp); typeText(t);
 }
 function setSpeaker(sp){
@@ -828,7 +831,9 @@ $("#backBtn").onclick=e=>{ e.stopPropagation(); clearInterval(st.timer); st.typi
   const h=st.hist||[];
   if(h.length<2){ show(st.id?"select":"title"); return; }
   h.pop(); const p=h.pop();
-  st.queue=p.q.slice(); st.onDone=p.d; st.score=p.s; drawHearts(); $("#chapter").textContent=p.ch; nextLine(); };
+  st.queue=p.q.slice(); st.onDone=p.d; st.score=p.s; drawHearts(); $("#chapter").textContent=p.ch;
+  if(p.ch2!==undefined){ $("#chara").innerHTML=p.ch2; $("#chara").className=p.cc; $("#aff").hidden=p.af; }
+  nextLine(); };
 $("#skipBtn").onclick=e=>{ e.stopPropagation(); if(st.waiting) return; finishTyping(); clearTimeout(st.autoT);
   while(st.queue.length){ const [sp,t]=st.queue.shift(); setSpeaker(sp); st.full=t; $("#text").textContent=t; } nextLine(); };
 document.addEventListener("keydown",e=>{ if($("#story").classList.contains("active") && (e.key===" "||e.key==="Enter") && document.activeElement.tagName!=="BUTTON"){ e.preventDefault(); advance(); }});
@@ -881,7 +886,9 @@ if(CONFIG.inviteUrl) $("#toInvite").href=CONFIG.inviteUrl;
 $("#toInvite").onclick=e=>{ if(!CONFIG.inviteUrl){ e.preventDefault(); toast("초대장은 곧 열려요. 조금만 기다려 주세요"); } };
 $("#homeBtn").onclick=()=>show("title");
 /* 미리보기: 주소 끝에 #true-ending 또는 #hidden-ending */
-function previewFromHash(){ const h=location.hash.replace("#",""); if(h==="true-ending") startRoute("true"); else if(h==="hidden-ending") startRoute("hidden"); }
+function previewFromHash(){ const h=location.hash.replace("#",""); if(h!=="true-ending"&&h!=="hidden-ending") return;
+  try{ history.replaceState(null,"",location.pathname+location.search); }catch(_){}
+  startRoute(h==="true-ending"?"true":"hidden"); }
 window.addEventListener("hashchange",previewFromHash); previewFromHash();
 $("#endAgain").onclick=()=>{ show("select"); $("#select").scrollTop=0; };
 $("#shareBtn").onclick=async()=>{
