@@ -358,6 +358,44 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 .bigcard .card-info .cn{font-size:20px;color:#3a1f48;white-space:nowrap;flex:none}
 .bigcard .card-info .ct{font-size:12px;font-weight:700;color:#b0306b;text-align:right;margin:0;line-height:1.3;white-space:nowrap;letter-spacing:-.02em;min-width:0;overflow:hidden;text-overflow:clip}
 #ending[data-sp="hidden"] .bigcard .card-info .ct{color:#c0174f}
+
+.btn-note{width:100%;min-height:46px;border-radius:999px;font-size:14px;font-weight:900;color:#fff;background:#ffffff1f;border:1.5px dashed #ffffffb3;backdrop-filter:blur(6px)}
+.btn-note:active{transform:scale(.98)}
+.note-modal{position:absolute;inset:0;z-index:55;display:flex;align-items:flex-end;justify-content:center;background:#140a20b3}
+.nm-box{width:100%;max-height:92%;overflow-y:auto;padding:18px 18px calc(20px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:#fff;display:flex;flex-direction:column;gap:12px;animation:sheetUp .3s var(--ease)}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.nm-head{display:flex;justify-content:space-between;align-items:center}
+.nm-head h3{font-family:"Gowun Batang",serif;font-size:19px;color:#4a2b55}
+.nm-x{width:36px;height:36px;border-radius:50%;font-size:16px;color:#7a5a86;background:#f6eef5}
+.nm-paper{border-radius:14px;padding:14px 14px 10px;box-shadow:inset 0 0 0 1px #0000000d,0 4px 12px #b0306b1a;transition:background .2s;background-image:repeating-linear-gradient(180deg,transparent 0 27px,#b0306b14 27px 28px)}
+.nm-paper textarea{width:100%;border:0;background:transparent;resize:none;font-family:"Gowun Dodum",sans-serif;font-size:16px;line-height:28px;color:#3a1f48;outline:none}
+.nm-foot{display:flex;justify-content:space-between;font-size:11.5px;color:#8a6f86;margin-top:4px}
+.nm-row{display:flex;flex-direction:column;gap:6px}
+.nm-row label{font-size:12.5px;font-weight:700;color:#4a2b55}
+.nm-row input{height:44px;border-radius:12px;border:1.5px solid #ecd2e6;padding:0 12px;font:inherit;font-size:16px;color:#3a1f48}
+.nm-row input:focus{border-color:#ff8fc3;outline:none}
+.nm-colors{display:flex;gap:10px}
+.nm-colors button{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1.5px #e3d3e6}
+.nm-colors button[data-c="pink"]{background:#ffe0ee}.nm-colors button[data-c="lav"]{background:#ece3ff}.nm-colors button[data-c="mint"]{background:#dcf7ea}.nm-colors button[data-c="lemon"]{background:#fff4c2}.nm-colors button[data-c="sky"]{background:#dcefff}
+.nm-colors button[aria-pressed="true"]{box-shadow:0 0 0 3px #ff6fae}
+.nm-box .btn-main{width:100%}
+.nm-box .btn-main[disabled]{opacity:.45}
+.nm-link{font-size:13px;font-weight:700;color:#b0306b;padding:6px}
+.wall{position:absolute;inset:0;z-index:56;overflow-y:auto;overflow-x:hidden;padding:0 14px calc(90px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#fdf3f8,#f3ecff)}
+.wall-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:14px 0 10px;background:linear-gradient(180deg,#fdf3f8 70%,#fdf3f800)}
+.wall-head h3{font-family:"Gowun Batang",serif;font-size:19px;color:#4a2b55}
+.wall-back{width:38px;height:38px;border-radius:50%;background:#fff;color:#7a5a86;font-size:16px;box-shadow:0 2px 8px #b0306b1f}
+.wall-sub{text-align:center;font-size:12.5px;color:#8a6f86;margin:-2px 0 14px}
+.wall-grid{columns:2;column-gap:12px}
+.note{break-inside:avoid;margin:0 0 12px;padding:14px 12px 10px;border-radius:6px 6px 14px 6px;background:var(--bg);transform:rotate(var(--r));box-shadow:0 6px 14px #4a2b551f;position:relative}
+.note::before{content:"";position:absolute;top:-7px;left:50%;width:44px;height:14px;transform:translateX(-50%) rotate(-3deg);background:#ffffffb3;border-radius:2px}
+.note.mine{outline:2px solid #ff8fc3;outline-offset:2px}
+.note-msg{font-family:"Gowun Dodum",sans-serif;font-size:14px;line-height:1.6;color:#3a1f48;white-space:pre-wrap;word-break:break-word}
+.note footer{margin-top:8px;display:flex;flex-direction:column;gap:2px;font-size:11.5px;color:#7a5a86}
+.note footer b{color:#b0306b}
+.note footer span{font-size:10.5px;opacity:.85}
+.wall-empty{column-span:all;text-align:center;font-size:14px;line-height:1.7;color:#8a6f86;padding:60px 0}
+.wall-write{position:fixed;left:14px;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));width:auto}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -438,6 +476,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
           <button class="btn-sub" id="endAgain">다른 장소 가보기</button>
           <button class="btn-sub" id="shareBtn">공유하기</button>
         </div>
+        <button class="btn-note" id="noteBtn"><span>💌</span> 앙~에게 쪽지 남기기</button>
       </div>
     </div>
     <div class="flash" id="flash"></div>
@@ -475,6 +514,36 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
     <div class="after"><button class="btn-sub" id="againBtn">다른 장소 가보기</button></div>
   </section>
 
+  <div class="note-modal" id="noteModal" hidden>
+    <form class="nm-box" id="noteForm" role="dialog" aria-label="앙~에게 쪽지 쓰기" novalidate>
+      <div class="nm-head"><h3>💌 앙~에게 쪽지 쓰기</h3><button type="button" class="nm-x" id="noteClose" aria-label="닫기">✕</button></div>
+      <div class="nm-paper" id="nmPaper">
+        <textarea id="nmMsg" maxlength="300" rows="6" placeholder="생일 축하해 앙~! 1월 2일에 보자 🎂"></textarea>
+        <div class="nm-foot"><span id="nmCard"></span><span id="nmCount">0/300</span></div>
+      </div>
+      <div class="nm-row">
+        <label for="nmName">보내는 사람</label>
+        <input id="nmName" maxlength="20" placeholder="비워두면 익명의 팬" autocomplete="nickname">
+      </div>
+      <div class="nm-row"><label>쪽지 색</label>
+        <div class="nm-colors" id="nmColors" role="radiogroup" aria-label="쪽지 색">
+          <button type="button" data-c="pink" aria-label="핑크" aria-pressed="true"></button><button type="button" data-c="lav" aria-label="라벤더" aria-pressed="false"></button><button type="button" data-c="mint" aria-label="민트" aria-pressed="false"></button><button type="button" data-c="lemon" aria-label="레몬" aria-pressed="false"></button><button type="button" data-c="sky" aria-label="하늘" aria-pressed="false"></button>
+        </div>
+      </div>
+      <button type="submit" class="btn-main" id="nmSend" disabled>쪽지 보내기</button>
+      <button type="button" class="nm-link" id="nmWall">📮 다른 친구들 쪽지 구경하기</button>
+    </form>
+  </div>
+  <div class="wall" id="wall" hidden>
+    <div class="wall-head">
+      <button class="wall-back" id="wallClose" aria-label="닫기">✕</button>
+      <h3>📮 앙~에게 온 쪽지</h3>
+      <button class="wall-back" id="wallRefresh" aria-label="새로고침">↻</button>
+    </div>
+    <p class="wall-sub" id="wallSub"></p>
+    <div class="wall-grid" id="wallGrid"></div>
+    <button class="btn-main wall-write" id="wallWrite">💌 나도 쪽지 쓰기</button>
+  </div>
   <div class="save-modal" id="saveModal" hidden>
     <div class="sm-box" role="dialog" aria-label="카드 저장">
       <img id="smImg" alt="저장할 카드 이미지">
@@ -488,7 +557,13 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-of
 
 <script>
 const CONFIG = {
-  inviteUrl: "https://forms.gle/pRirV4QypZjVeVzJ8",   // 초대장 외부 링크 (비워두면 '준비 중' 안내)
+  inviteUrl: "https://forms.gle/pRirV4QypZjVeVzJ8",
+  // 쪽지함 (구글 폼 + 구글 시트). 비워두면 이 기기에만 저장되는 체험 모드로 동작
+  note: {
+    formAction: "https://docs.google.com/forms/d/e/1FAIpQLSdk1n0cRbxRPs5IGb4pfre2-_Zy_UYjSPu0jcjLhKByYFZWWw/formResponse",
+    fields: { name:"entry.437386861", msg:"entry.925626460", card:"entry.1127007278", color:"entry.306519886" },
+    sheetCsv: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXgt0eF6pqAQgrH9wPmWMa0vQs7rvIGlQlS606LLNoacU4bdewBKQWM32UchR1hWw2X2_oPkeneZgy/pub?gid=1318814592&single=true&output=csv"
+  },   // 초대장 외부 링크 (비워두면 '준비 중' 안내)
   shareUrl: "https://ang-ashy-gamma.vercel.app",    // 공유할 게임 링크 (비워두면 '준비 중' 안내)
   place: "서울 마포구 동교동 177-16 B1",
   placeSub: "홍대입구역 근처",
@@ -991,6 +1066,67 @@ async function saveCard(){
 }
 $("#smClose").onclick=()=>{ $("#saveModal").hidden=true; };
 $("#saveModal").onclick=e=>{ if(e.target.id==="saveModal") $("#saveModal").hidden=true; };
+
+/* ===== 앙~에게 쪽지 ===== */
+const NOTE_COLORS={pink:"#ffe0ee",lav:"#ece3ff",mint:"#dcf7ea",lemon:"#fff4c2",sky:"#dcefff"};
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const noteReady=()=>!!(CONFIG.note.formAction&&CONFIG.note.fields.msg);
+let noteColor="pink";
+function cardLabel(){ if(!last) return ""; const c=CHARS[last.id]; return `${c.name} · ${last.label}`; }
+function openNote(){
+  $("#nmCard").textContent=last?`🃏 ${cardLabel()}`:"";
+  $("#noteModal").hidden=false; setTimeout(()=>$("#nmMsg").focus(),50);
+}
+function closeNote(){ $("#noteModal").hidden=true; }
+$("#noteBtn").onclick=openNote; $("#noteClose").onclick=closeNote;
+$("#noteModal").onclick=e=>{ if(e.target.id==="noteModal") closeNote(); };
+$("#nmMsg").addEventListener("input",()=>{ const v=$("#nmMsg").value; $("#nmCount").textContent=`${v.length}/300`; $("#nmSend").disabled=!v.trim(); });
+document.querySelectorAll("#nmColors button").forEach(b=>b.onclick=()=>{ noteColor=b.dataset.c; document.querySelectorAll("#nmColors button").forEach(x=>x.setAttribute("aria-pressed",x===b)); $("#nmPaper").style.background=NOTE_COLORS[noteColor]; });
+$("#nmPaper").style.background=NOTE_COLORS.pink;
+function mineNotes(){ try{ return JSON.parse(localStorage.getItem("ang_notes_mine")||"[]"); }catch(_){ return []; } }
+function saveMine(n){ try{ const a=mineNotes(); a.push(n); localStorage.setItem("ang_notes_mine",JSON.stringify(a)); }catch(_){} }
+$("#noteForm").addEventListener("submit",async e=>{
+  e.preventDefault(); const msg=$("#nmMsg").value.trim(); if(!msg) return;
+  const n={name:$("#nmName").value.trim()||"익명의 팬", msg, card:cardLabel(), color:noteColor, time:new Date().toISOString(), mine:1};
+  $("#nmSend").disabled=true; $("#nmSend").textContent="보내는 중…";
+  try{
+    if(noteReady()){ const f=CONFIG.note.fields, body=new URLSearchParams();
+      body.append(f.msg,n.msg); if(f.name) body.append(f.name,n.name); if(f.card) body.append(f.card,n.card); if(f.color) body.append(f.color,n.color);
+      await fetch(CONFIG.note.formAction,{method:"POST",mode:"no-cors",body}); }
+    saveMine(n); $("#nmMsg").value=""; $("#nmCount").textContent="0/300";
+    closeNote(); toast("쪽지를 보냈어요 💌"); openWall();
+  }catch(_){ toast("쪽지를 못 보냈어요. 잠시 후 다시 시도해 주세요"); }
+  finally{ $("#nmSend").textContent="쪽지 보내기"; $("#nmSend").disabled=!$("#nmMsg").value.trim(); }
+});
+function parseCSV(s){ const rows=[]; let r=[],f="",q=false;
+  for(let i=0;i<s.length;i++){ const ch=s[i];
+    if(q){ if(ch==='"'){ if(s[i+1]==='"'){ f+='"'; i++; } else q=false; } else f+=ch; }
+    else if(ch==='"') q=true; else if(ch===','){ r.push(f); f=""; } else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&s[i+1]==='\n') i++; r.push(f); rows.push(r); r=[]; f=""; } else f+=ch; }
+  if(f||r.length){ r.push(f); rows.push(r); } return rows; }
+async function loadNotes(){
+  let list=[];
+  if(CONFIG.note.sheetCsv){
+    const res=await fetch(CONFIG.note.sheetCsv+(CONFIG.note.sheetCsv.includes("?")?"&":"?")+"t="+Date.now()); const rows=parseCSV(await res.text());
+    const h=(rows.shift()||[]).map(x=>x.trim()); const idx=k=>h.findIndex(x=>x.includes(k));
+    const iN=idx("이름")>=0?idx("이름"):idx("보내는"), iM=idx("쪽지")>=0?idx("쪽지"):idx("메시지"), iC=idx("카드"), iK=idx("색");
+    list=rows.filter(r=>r[iM]&&r[iM].trim()).map(r=>({time:r[0]||"",name:(r[iN]||"").trim()||"익명의 팬",msg:r[iM],card:iC>=0?r[iC]:"",color:iK>=0?r[iK]:"pink"}));
+  }
+  const mine=mineNotes().filter(m=>!list.some(n=>n.msg===m.msg&&n.name===m.name));
+  return mine.reverse().concat(list.reverse());
+}
+async function openWall(){
+  $("#wall").hidden=false; $("#wall").scrollTop=0; $("#wallGrid").innerHTML='<p class="wall-empty">쪽지를 불러오는 중…</p>';
+  let list=[]; try{ list=await loadNotes(); }catch(_){ list=mineNotes().reverse(); toast("쪽지함을 불러오지 못했어요"); }
+  $("#wallSub").textContent=noteReady()?`지금까지 ${list.length}장의 쪽지가 도착했어요`:`체험 모드: 이 기기에서 쓴 쪽지만 보여요 (${list.length}장)`;
+  if(!list.length){ $("#wallGrid").innerHTML='<p class="wall-empty">아직 도착한 쪽지가 없어요.<br>첫 번째 쪽지를 남겨 주세요 💌</p>'; return; }
+  $("#wallGrid").innerHTML=list.map((n,i)=>`<article class="note${n.mine?" mine":""}" style="--bg:${NOTE_COLORS[n.color]||NOTE_COLORS.pink};--r:${((i*37)%7-3)*.8}deg">
+    <p class="note-msg">${esc(n.msg)}</p>
+    <footer><b>from. ${esc(n.name)}</b>${n.card?`<span>${esc(n.card)}</span>`:""}</footer></article>`).join("");
+}
+$("#nmWall").onclick=()=>{ closeNote(); openWall(); };
+$("#wallClose").onclick=()=>{ $("#wall").hidden=true; };
+$("#wallRefresh").onclick=openWall;
+$("#wallWrite").onclick=()=>{ $("#wall").hidden=true; openNote(); };
 if(CONFIG.inviteUrl) $("#toInvite").href=CONFIG.inviteUrl;
 $("#toInvite").onclick=e=>{ if(!CONFIG.inviteUrl){ e.preventDefault(); toast("초대장은 곧 열려요. 조금만 기다려 주세요"); } };
 $("#homeBtn").onclick=()=>show("title");
